@@ -1,4 +1,18 @@
 # DermaFusion
+DermaFusion — Legal Pages
+
+This folder contains the public legal pages for the DermaFusion iOS app, ready to host on GitHub Pages with no build step.
+
+Contents
+
+File	What it is
+index.html	Landing page linking to all three documents.
+privacy.html	Privacy Policy — the URL App Store Connect requires.
+terms.html	Terms of Use.
+disclaimer.html	Medical Disclaimer (full version of the in-app notice).
+style.css	Shared stylesheet (responsive, light/dark).
+.nojekyll	Tells GitHub Pages to serve the files as-is (no Jekyll processing).
+PRIVACY_POLICY.md, TERMS_OF_USE.md, MEDICAL_DISCLAIMER.md	Plain‑text Markdown copies (same content) — handy for diffing / re‑use.
 
 Multi-source deep learning for **8-class skin-lesion classification** (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and shipped as both a Gradio research demo and a native iOS app.
 
