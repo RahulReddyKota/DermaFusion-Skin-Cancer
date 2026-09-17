@@ -3,8 +3,7 @@
 Multi-source deep learning for **8-class skin-lesion classification** (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and shipped as both a Gradio research demo and a native iOS app.
 
 - 🧠 **This repo** — the ML side: training pipeline, Colab notebook, Gradio inference runtime, CoreML export, and the deployment artifacts that feed the iOS app.
-- 📱 **iOS app** — [`ManikantaSirumalla/DermaFusion-App`](https://github.com/ManikantaSirumalla/DermaFusion-App) (SwiftUI + Core ML, fully on-device inference).
-- ⚖️ **Legal pages** — [`ManikantaSirumalla/DermaFusion-Legal`](https://github.com/ManikantaSirumalla/DermaFusion-Legal).
+
 
 > [!WARNING]
 > **Research use only — not a medical device.** DermaFusion is an academic research project. It is not FDA/CE cleared, has not been clinically validated, and must not be used to diagnose, screen, or make decisions about any real skin condition. Concerning skin lesions should always be evaluated by a qualified clinician.
