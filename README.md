@@ -16,7 +16,7 @@ PRIVACY_POLICY.md, TERMS_OF_USE.md, MEDICAL_DISCLAIMER.md	Plain‑text Markdown 
 
 Multi-source deep learning for **8-class skin-lesion classification** (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and shipped as both a Gradio research demo and a native iOS app.
 
-- 🧠 **This repo** — the ML side: training pipeline, Colab notebook, Gradio inference runtime, CoreML export, and the deployment artifacts that feed the iOS app.
+-  **This repo** — the ML side: training pipeline, Colab notebook, Gradio inference runtime, CoreML export, and the deployment artifacts that feed the iOS app.
 
 
 > [!WARNING]
