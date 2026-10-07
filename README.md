@@ -1,4 +1,8 @@
-# DermaFusion
+<p align="center"><img src="dermafusion-icon.png" width="112" alt="DermaFusion app icon"></p>
+
+<h1 align="center">DermaFusion</h1>
+
+<p align="center"><strong>On-device skin-lesion classification · Research prototype</strong></p>
 
 Deep learning for **skin-lesion classification** from dermoscopic and smartphone images. The final system is a two-model EfficientNet-B4 ensemble over 8 lesion classes (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and shipped as both a Gradio research demo and a native iOS app.
 
@@ -8,6 +12,14 @@ This repository holds the **data and evaluation side** of the ML pipeline: datas
 
 > [!WARNING]
 > **Research use only — not a medical device.** DermaFusion is an academic research project. It is not FDA/CE cleared, has not been clinically validated, and must not be used to diagnose, screen, or make decisions about any real skin condition. Concerning skin lesions should always be evaluated by a qualified clinician.
+
+---
+
+## App screens
+
+<p align="center"><img src="dermafusion-screens.webp" width="100%" alt="Eight screens of the DermaFusion iOS app: scan, 3D body tap, Grad-CAM toggle, class list, results view, ABCDE rule, melanoma overview and body model"></p>
+
+Screens from the DermaFusion iOS app, which runs the exported ensemble on device. The app's source code is not in this repository.
 
 ---
 
@@ -62,6 +74,8 @@ DermaFusion-Skin-Cancer/
 └── README.md
 ```
 
+> **Layout note:** the files are currently stored at the top level of this repository, and `requirements (2).txt` is the `requirements.txt` used below. The tree shows the package layout the code expects.
+
 **Not in this repository:** `src/models`, `src/training`, `src/utils`, `src/evaluation/interpretability.py`, `scripts/`, `tests/` and the Core ML export. They are in the [full pipeline repository](https://github.com/ManikantaSirumalla/DermaFusion), which uses the same folder layout.
 
 ---
@@ -99,7 +113,7 @@ Requires **Python 3.10 or 3.11** (the pinned scikit-learn has no prebuilt packag
 
 ## Use the data and evaluation modules
 
-The modules under `src/data` and `src/evaluation` run on their own. Run Python from the repository root so that `src` is importable.
+With the files in the layout above, the modules under `src/data` and `src/evaluation` run on their own. Run Python from the repository root so that `src` is importable.
 
 **Leakage-safe splits and metadata encoding.** `load_metadata` expects a HAM10000-style CSV with `lesion_id`, `image_id`, `dx`, `dx_type`, `age`, `sex` and `localization` columns.
 
