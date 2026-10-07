@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DermaFusion · Rahul Reddy Kota</title>
+<meta name="description" content="DermaFusion: a two-model EfficientNet-B4 ensemble for 8-class skin-lesion classification, shipped as a Gradio research demo and an on-device iOS app."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--font-main:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(0.25,1,0.5,1);--max-w:1120px;--read-w:820px}
+[data-theme="dark"]{--bg:#000;--bg-elevated:#0d0d0d;--bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);--bg-nav:rgba(0,0,0,0.72);--text-1:#f5f5f7;--text-2:#a1a1a6;--text-3:#6e6e73;--border:rgba(255,255,255,0.1);--accent:#2997ff;--accent-hover:#63b3ff;--sub-grad:linear-gradient(90deg,#2997ff 0%,#7d5cf5 50%,#ff4f8b 100%)}
+[data-theme="light"]{--bg:#fff;--bg-elevated:#f5f5f7;--bg-card:rgba(0,0,0,0.03);--bg-card-hover:rgba(0,0,0,0.06);--bg-nav:rgba(255,255,255,0.72);--text-1:#1d1d1f;--text-2:#515154;--text-3:#86868b;--border:rgba(0,0,0,0.1);--accent:#0066cc;--accent-hover:#0077ed;--sub-grad:linear-gradient(90deg,#0066cc 0%,#6a45e0 50%,#e0306f 100%)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-main);background:var(--bg);color:var(--text-1);line-height:1.5;overflow-x:hidden;transition:background .5s var(--ease),color .5s var(--ease)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+::selection{background:var(--accent);color:#fff}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:48px;display:flex;align-items:center;justify-content:center;background:var(--bg-nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--border)}
+.nav-inner{width:100%;max-width:var(--max-w);padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{font-weight:600;font-size:1.05rem;letter-spacing:-.02em;opacity:.92;white-space:nowrap}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:.8rem;color:var(--text-2);transition:color .3s}
+.nav-links a:hover{color:var(--text-1)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:none;background:var(--bg-card);color:var(--text-2);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.theme-btn:hover{background:var(--bg-card-hover);color:var(--text-1)}
+.nav-resume{padding:6px 14px;border-radius:980px;background:var(--accent);color:#fff;font-size:.78rem;font-weight:500;transition:background .3s}
+.nav-resume:hover{background:var(--accent-hover)}
+
+/* HERO */
+.hero{padding:140px 24px 0;text-align:center}
+.back{display:inline-block;font-size:.9rem;color:var(--text-2);margin-bottom:28px;transition:color .3s}
+.back:hover{color:var(--text-1)}
+.app-icon{display:block;width:112px;height:112px;margin:0 auto 22px;border-radius:26px;box-shadow:0 20px 50px -18px rgba(0,0,0,.6)}
+.hero h1{font-size:clamp(3rem,9vw,5.6rem);font-weight:700;letter-spacing:-.045em;line-height:1.02}
+.hero-sub{margin-top:16px;font-size:clamp(1.15rem,2.7vw,1.75rem);font-weight:600;letter-spacing:-.02em;line-height:1.25;background:var(--sub-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block}
+.hero-desc{max-width:680px;margin:28px auto 0;font-size:clamp(1rem,1.9vw,1.25rem);color:var(--text-2);line-height:1.5;letter-spacing:-.01em}
+.hero-link{display:inline-block;margin-top:34px;font-size:1.1rem;color:var(--accent);transition:color .3s}
+.hero-link:hover{color:var(--accent-hover);text-decoration:underline}
+.stats{max-width:var(--read-w);margin:72px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.stat-value{font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-.035em;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat-label{margin-top:8px;font-size:.85rem;color:var(--text-2)}
+
+/* SECTIONS */
+.section{max-width:var(--max-w);margin:0 auto;padding:110px 24px 0}
+.section.narrow{max-width:calc(var(--read-w) + 48px)}
+.eyebrow{font-size:.8rem;font-weight:600;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.section h2{font-size:clamp(2rem,5.4vw,3.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.05;margin-bottom:28px}
+.lead{font-size:clamp(1.02rem,1.8vw,1.2rem);color:var(--text-2);line-height:1.6}
+.lead strong,.prose strong{color:var(--text-1);font-weight:600}
+
+/* SCREENS */
+.screens{--edge:max(24px,calc(50vw - var(--max-w)/2 + 24px));display:flex;align-items:flex-start;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:var(--edge);padding:6px var(--edge);margin-inline:calc(50% - 50vw);scrollbar-width:none}
+.screens::-webkit-scrollbar{display:none}
+.screens li{list-style:none;flex:0 0 auto;scroll-snap-align:start}
+.screens img{display:block;width:min(300px,72vw);height:auto;border-radius:20px;border:1px solid var(--border)}
+.screens-nav{display:flex;justify-content:flex-end;gap:14px;margin-top:26px}
+.screens-btn{width:48px;height:48px;border-radius:50%;border:none;background:var(--bg-card-hover);color:var(--text-1);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s,opacity .3s}
+.screens-btn:hover:not(:disabled){background:var(--border)}
+.screens-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.screens-btn:disabled{opacity:.35;cursor:default}
+.screens-btn svg{width:18px;height:18px}
+
+/* BUILT LIST */
+.built{list-style:none;border-top:.5px solid var(--border)}
+.built li{display:grid;grid-template-columns:48px 1fr;gap:8px;padding:20px 0;border-bottom:.5px solid var(--border);font-size:clamp(1rem,1.7vw,1.15rem);line-height:1.5}
+.built .n{font-family:var(--font-mono);font-size:.82rem;color:var(--text-3);padding-top:.3em}
+
+/* PROSE */
+.prose p{font-size:1.02rem;color:var(--text-2);line-height:1.7;margin-bottom:18px}
+.prose h3{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;margin:44px 0 16px}
+.prose ol,.prose ul{padding-left:1.25em;color:var(--text-2);line-height:1.7;margin-bottom:18px}
+.prose li{margin-bottom:10px}
+.prose a{color:var(--accent)}
+.prose a:hover{text-decoration:underline}
+.prose code{font-family:var(--font-mono);font-size:.85em;background:var(--bg-card);border:.5px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--text-1)}
+.note{padding:16px 20px;border-radius:14px;background:var(--bg-card);border:.5px solid var(--border);color:var(--text-1);font-size:.98rem;line-height:1.6;margin-bottom:18px}
+.table-wrap{overflow-x:auto;border:.5px solid var(--border);border-radius:14px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:520px}
+th,td{text-align:left;padding:12px 16px;border-bottom:.5px solid var(--border);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+th{font-size:.74rem;font-weight:600;color:var(--text-3);letter-spacing:.05em;text-transform:uppercase;background:var(--bg-card)}
+td{color:var(--text-2)}
+td:first-child{color:var(--text-1);font-weight:500;white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:10px;list-style:none}
+.chips li{padding:9px 18px;border-radius:980px;background:var(--bg-card);border:.5px solid var(--border);font-size:.92rem;color:var(--text-1)}
+.fineprint{margin-top:26px;font-size:.85rem;color:var(--text-3)}
+
+/* NEXT + FOOTER */
+.next{max-width:var(--max-w);margin:110px auto 0;padding:44px 24px;border-top:.5px solid var(--border);text-align:center}
+.next span{display:block;font-size:.8rem;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.next a{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:600;letter-spacing:-.02em;color:var(--accent)}
+.next a:hover{color:var(--accent-hover)}
+.footer{padding:20px 24px;border-top:.5px solid var(--border)}
+.footer-inner{max-width:var(--max-w);margin:0 auto;display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-3);flex-wrap:wrap;gap:10px}
+.footer a{transition:color .3s}
+.footer a:hover{color:var(--text-1)}
+
+@media(max-width:820px){.nav-links{display:none}}
+@media(max-width:600px){
+  .hero{padding-top:104px}
+  .stats{gap:12px;margin-top:52px}
+  .section{padding-top:76px}
+  .next{margin-top:76px}
+  .built li{grid-template-columns:36px 1fr}
+  .footer-inner{flex-direction:column;align-items:center}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Rahul Reddy Kota.</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="index.html#education">Education</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+      <a class="nav-resume" href="Rahul_Reddy_Kota_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <header class="hero">
+    <a class="back" href="index.html#projects">‹ All projects</a>
+    <img class="app-icon" src="dermafusion-icon.png" width="112" height="112" alt="DermaFusion app icon">
+    <h1>DermaFusion</h1>
+    <p class="hero-sub">On-device skin-lesion classification · Research prototype</p>
+    <p class="hero-desc">A two-model EfficientNet-B4 ensemble trained on four public dermatology datasets, shipped as a Gradio research demo and a native iOS app that analyzes photos entirely on iPhone with no cloud, sign-in, or analytics.</p>
+    <a class="hero-link" href="https://github.com/RahulReddyKota/DermaFusion-Skin-Cancer" target="_blank" rel="noopener">GitHub ›</a>
+
+    <div class="stats">
+      <div><div class="stat-value">0.830</div><div class="stat-label">AUROC</div></div>
+      <div><div class="stat-value">95.4%</div><div class="stat-label">Top-3 accuracy</div></div>
+      <div><div class="stat-value">61,694</div><div class="stat-label">Training images</div></div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>DermaFusion screens.</h2>
+    <ul class="screens" id="screens">
+      <li><img src="screen-scan.jpg" width="600" height="1303" alt="DermaFusion iOS app: Scan screen with New Scan and Choose from Library"></li>
+      <li><img src="screen-body-tap.jpg" width="600" height="1303" alt="DermaFusion iOS app: 3D body model for tapping the lesion location, with chest selected"></li>
+      <li><img src="screen-gradcam.jpg" width="600" height="1303" alt="DermaFusion iOS app: scan detail with the Grad-CAM heatmap switched on over a lesion"></li>
+      <li><img src="screen-class-list.jpg" width="600" height="1303" alt="DermaFusion iOS app: class list with a confidence gauge reading 87% for melanocytic nevus"></li>
+      <li><img src="screen-one-view.jpg" width="600" height="1303" loading="lazy" alt="DermaFusion iOS app: results screen with the lesion photo, a low-risk assessment and class probabilities"></li>
+      <li><img src="learn.jpg" width="640" height="1387" loading="lazy" alt="DermaFusion iOS app: Learn screen with the ABCDE rule and skin-lesion types labeled benign or malignant"></li>
+      <li><img src="overview.jpg" width="640" height="1390" loading="lazy" alt="DermaFusion iOS app: melanoma overview screen with key visual features and a malignant label"></li>
+      <li><img src="screen-body-model.jpg" width="600" height="1303" loading="lazy" alt="DermaFusion iOS app: second 3D body model for setting the lesion site, with abdomen selected"></li>
+    </ul>
+    <div class="screens-nav">
+      <button class="screens-btn" id="screensPrev" type="button" aria-label="Previous screens" disabled><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5 5.5 9l5.5 5.5"/></svg></button>
+      <button class="screens-btn" id="screensNext" type="button" aria-label="Next screens"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5 12.5 9 7 14.5"/></svg></button>
+    </div>
+  </section>
+
+  <section class="section narrow">
+    <h2>Overview</h2>
+    <p class="lead">Multi-source deep learning for <strong>8-class skin-lesion classification</strong>, with Grad-CAM heatmap overlays, a malignant-risk gauge, and melanoma triage. The iOS app adds camera capture and photo import, non-skin image rejection, and PDF report export through the share sheet. Designed for educational research, not as a medical device.</p>
+  </section>
+
+  <section class="section narrow">
+    <h2>What I built.</h2>
+    <ol class="built">
+      <li><span class="n">01</span><span>Two-model EfficientNet-B4 soft-vote ensemble (E0 + E3, 380 × 380) for 8-class skin-lesion classification</span></li>
+      <li><span class="n">02</span><span>Trained on 61,694 dermoscopic and smartphone images unified from ISIC 2018/2019/2020 and PAD-UFES-20</span></li>
+      <li><span class="n">03</span><span>Patient-grouped splits with zero patient or lesion overlap, Shades-of-Gray color constancy, and DullRazor hair removal</span></li>
+      <li><span class="n">04</span><span>Class-balanced focal loss, MixUp, EMA, Dirichlet-tuned ensemble weights, and per-class thresholds</span></li>
+      <li><span class="n">05</span><span>Gradio research demo with Grad-CAM overlays, plus Core ML export to two FP16 packages (34 MB each) that run fully on device in the iOS app</span></li>
+      <li><span class="n">06</span><span>0.830 malignant-vs-benign AUROC and 95.4% top-3 accuracy on a 5,279-image held-out test set, verified through automated clinical-readiness gates</span></li>
+    </ol>
+  </section>
+
+  <section class="section narrow prose">
+    <div class="eyebrow">Project details</div>
+    <h2>In depth.</h2>
+    <p>Multi-source deep learning for <strong>8-class skin-lesion classification</strong> (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and deployed as both a Gradio research demo and a native iOS app.</p>
+    <p class="note"><strong>DermaFusion is an educational and research tool. It is not a medical device, not FDA approved, and not a substitute for professional medical advice.</strong></p>
+
+    <h3>Headline results</h3>
+    <p>Final E0 + E3 soft-vote ensemble (EfficientNet-B4 × 2, 380 × 380), TEST set n = 5,279, 1,000-iteration bootstrap 95% CI:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value (95% CI)</th></tr></thead>
+        <tbody>
+          <tr><td>8-class balanced accuracy</td><td class="num">0.540 [0.509, 0.568]</td></tr>
+          <tr><td>8-class macro F1</td><td class="num">0.469 [0.441, 0.495]</td></tr>
+          <tr><td>Top-1 / Top-2 / Top-3 accuracy</td><td class="num">0.778 / 0.907 / 0.954</td></tr>
+          <tr><td>Binary-malignant AUROC</td><td class="num">0.830</td></tr>
+          <tr><td>Sensitivity @ 95% specificity</td><td class="num">0.462</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Architecture summary</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Data</td><td>ISIC 2018 / 2019 / 2020 + PAD-UFES-20 → 61,694 dermoscopic + smartphone images, 8 unified classes</td></tr>
+          <tr><td>Splits</td><td>Patient-grouped (<code>GroupShuffleSplit</code> on <code>patient_id → lesion_id</code>) + iterative leakage enforcement → TRAIN 52,483 / VAL 3,932 / TEST 5,279, <strong>zero patient/lesion overlap</strong></td></tr>
+          <tr><td>Preprocessing</td><td>Shades-of-Gray (power = 6) + DullRazor + 380 × 380</td></tr>
+          <tr><td>Backbone</td><td>EfficientNet-B4 (~17.6 M params), two members trained from different starting points</td></tr>
+          <tr><td>E0</td><td><code>efficientnet_b4</code>, CB-Focal (γ = 1.5) + MixUp + TrivialAugmentWide + EMA 0.999, √-inverse sampler</td></tr>
+          <tr><td>E3</td><td><code>tf_efficientnet_b4.ns_jft_in1k</code>, class-balanced focal (γ = 2.0), full-inverse sampler</td></tr>
+          <tr><td>Ensemble</td><td>Soft-vote, Dirichlet-optimised weights <code>[0.705, 0.295]</code>, per-class thresholds tuned on VAL macro-F1</td></tr>
+          <tr><td>Deployment</td><td>Gradio (single 142 MB ensemble bundle) + iOS (two FP16 <code>.mlpackage</code> files, 34 MB each)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>iOS app: how it works</h3>
+    <ol>
+      <li><strong>Capture / import</strong> a close-up of a skin lesion (camera with guided framing, tap-to-focus, macro-lens preference; or photo library).</li>
+      <li><strong>Preflight</strong>: Vision structural detectors (text / face / animal / barcode) plus a color and quality sanity gate. Non-lesion photos are rejected with actionable guidance before inference.</li>
+      <li><strong>Inference</strong>: the on-device EfficientNet-B4 soft-vote ensemble (E0 + E3) produces a probability distribution over 8 lesion categories. Everything runs locally via Core ML and the Apple Neural Engine; nothing is uploaded.</li>
+      <li><strong>Results</strong>: probability chart, malignant-risk gauge, and a Grad-CAM-style attention overlay; optional PDF export; local scan history.</li>
+    </ol>
+
+    <h3>Privacy</h3>
+    <p>No accounts, no networking code, no analytics, telemetry, ads, or third-party SDKs. Images and results stay on the device.</p>
+
+    <h3>Clinical readiness gates</h3>
+    <p>Full-split validation runs against the deployment bundle, and a readiness report turns the results into pass/fail checks. The default <code>screening_v1</code> profile checks sample size, top-1 / balanced accuracy / macro-F1, MEL triage sensitivity / specificity / NPV, and class recall for MEL / BCC / AKIEC.</p>
+
+    <h3>References</h3>
+    <ul>
+      <li>ISIC 2018 Task 3: <a href="https://challenge.isic-archive.com/landing/2018/" target="_blank" rel="noopener">challenge.isic-archive.com/landing/2018</a></li>
+      <li>ISIC 2019: <a href="https://challenge.isic-archive.com/landing/2019/" target="_blank" rel="noopener">challenge.isic-archive.com/landing/2019</a></li>
+      <li>HAM10000: Tschandl et al., <em>Scientific Data</em> (2018)</li>
+      <li>PAD-UFES-20: Pacheco et al., <em>Data in Brief</em> (2020)</li>
+      <li>Shades-of-Gray colour constancy: Finlayson &amp; Trezzi (2004)</li>
+      <li>DullRazor hair removal: Lee et al. (1997)</li>
+      <li>Class-balanced focal loss: Cui et al., <em>CVPR</em> (2019)</li>
+    </ul>
+  </section>
+
+  <section class="section narrow">
+    <div class="eyebrow">Tech specs</div>
+    <h2>Under the hood.</h2>
+    <ul class="chips">
+      <li>Python</li>
+      <li>PyTorch</li>
+      <li>EfficientNet-B4</li>
+      <li>Grad-CAM</li>
+      <li>OpenCV</li>
+      <li>Gradio</li>
+      <li>Core ML</li>
+    </ul>
+    <p class="fineprint">Designed for educational research, not as a medical device. Awarded the AI RADA &amp; Healthcare prize, Jan 2026.</p>
+  </section>
+
+  <div class="next">
+    <span>Next</span>
+    <a href="index.html#projects">All projects ›</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>© 2026 Rahul Reddy Kota · DermaFusion is an educational research prototype and is not a medical device.</div>
+    <div style="display:flex;gap:18px">
+      <a href="https://www.linkedin.com/in/rahul-reddy-kota-b55a3a251/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/RahulReddyKota" target="_blank" rel="noopener">GitHub</a>
+      <a href="Rahul_Reddy_Kota_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a href="mailto:kotarahulreddy@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const root=document.documentElement,themeBtn=document.getElementById('themeBtn');
+function setTheme(t){root.setAttribute('data-theme',t);themeBtn.textContent=t==='dark'?'🌙':'☀️'}
+themeBtn.addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+const track=document.getElementById('screens'),prevBtn=document.getElementById('screensPrev'),nextBtn=document.getElementById('screensNext');
+const smooth=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function pageStep(){
+  const card=track.querySelector('li').getBoundingClientRect().width+(parseFloat(getComputedStyle(track).columnGap)||20);
+  return card*Math.max(1,Math.floor(track.clientWidth/card)-1);
+}
+function updateNav(){
+  const max=track.scrollWidth-track.clientWidth;
+  prevBtn.disabled=track.scrollLeft<=2;
+  nextBtn.disabled=track.scrollLeft>=max-2;
+}
+prevBtn.addEventListener('click',()=>track.scrollBy({left:-pageStep(),behavior:smooth?'smooth':'auto'}));
+nextBtn.addEventListener('click',()=>track.scrollBy({left:pageStep(),behavior:smooth?'smooth':'auto'}));
+track.addEventListener('scroll',updateNav,{passive:true});
+window.addEventListener('resize',updateNav);
+window.addEventListener('load',updateNav);
+updateNav();
+</script>
+</body>
+</html>
