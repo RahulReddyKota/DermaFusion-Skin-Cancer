@@ -4,8 +4,6 @@ Deep learning for **skin-lesion classification** from dermoscopic and smartphone
 
 This repository holds the **data and evaluation side** of the ML pipeline: dataset loading, colour constancy and hair removal, leakage-safe splits, a lesion-aware class-balanced sampler, augmentations, and the metrics, calibration, fairness and statistics modules, along with training configs, analysis notebooks and the Gradio demo entry points.
 
-> **Full pipeline** (model definitions, trainer, command-line scripts, tests, Core ML export): [ManikantaSirumalla/DermaFusion](https://github.com/ManikantaSirumalla/DermaFusion).
->
 > **Project page:** [rahulreddykota.github.io/dermafusion.html](https://rahulreddykota.github.io/dermafusion.html).
 
 > [!WARNING]
