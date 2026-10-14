@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{--font-main:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;--font-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(0.25,1,0.5,1);--max-w:1120px;--read-w:820px}
-[data-theme="dark"]{--bg:#000;--bg-elevated:#0d0d0d;--bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);--bg-nav:rgba(0,0,0,0.72);--text-1:#f5f5f7;--text-2:#a1a1a6;--text-3:#6e6e73;--border:rgba(255,255,255,0.1);--accent:#2997ff;--accent-hover:#63b3ff;--sub-grad:linear-gradient(90deg,#2997ff 0%,#7d5cf5 50%,#ff4f8b 100%)}
-[data-theme="light"]{--bg:#fff;--bg-elevated:#f5f5f7;--bg-card:rgba(0,0,0,0.03);--bg-card-hover:rgba(0,0,0,0.06);--bg-nav:rgba(255,255,255,0.72);--text-1:#1d1d1f;--text-2:#515154;--text-3:#86868b;--border:rgba(0,0,0,0.1);--accent:#0066cc;--accent-hover:#0077ed;--sub-grad:linear-gradient(90deg,#0066cc 0%,#6a45e0 50%,#e0306f 100%)}
+[data-theme="dark"]{--bg:#000;--bg-elevated:#0d0d0d;--bg-card:rgba(255,255,255,0.04);--bg-card-hover:rgba(255,255,255,0.07);--bg-nav:rgba(0,0,0,0.72);--text-1:#f5f5f7;--text-2:#a1a1a6;--text-3:#6e6e73;--border:rgba(255,255,255,0.1);--accent:#2997ff;--accent-hover:#63b3ff;--sub-grad:linear-gradient(90deg,#2997ff 0%,#7d5cf5 50%,#ff4f8b 100%);--icon-bg:linear-gradient(160deg,#2a2a2d,#0c0c0d)}
+[data-theme="light"]{--bg:#fff;--bg-elevated:#f5f5f7;--bg-card:rgba(0,0,0,0.03);--bg-card-hover:rgba(0,0,0,0.06);--bg-nav:rgba(255,255,255,0.72);--text-1:#1d1d1f;--text-2:#515154;--text-3:#86868b;--border:rgba(0,0,0,0.1);--accent:#0066cc;--accent-hover:#0077ed;--sub-grad:linear-gradient(90deg,#0066cc 0%,#6a45e0 50%,#e0306f 100%);--icon-bg:linear-gradient(160deg,#2a2a2d,#0c0c0d)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-main);background:var(--bg);color:var(--text-1);line-height:1.5;overflow-x:hidden;transition:background .5s var(--ease),color .5s var(--ease)}
@@ -35,7 +35,7 @@ button{font-family:inherit}
 .hero{padding:140px 24px 0;text-align:center}
 .back{display:inline-block;font-size:.9rem;color:var(--text-2);margin-bottom:28px;transition:color .3s}
 .back:hover{color:var(--text-1)}
-.app-icon{display:block;width:112px;height:112px;margin:0 auto 22px;border-radius:26px;box-shadow:0 20px 50px -18px rgba(0,0,0,.6)}
+.app-icon{display:block;width:112px;height:112px;border-radius:25px;margin:0 auto 22px;box-shadow:0 20px 50px -18px rgba(0,0,0,.6)}
 .hero h1{font-size:clamp(3rem,9vw,5.6rem);font-weight:700;letter-spacing:-.045em;line-height:1.02}
 .hero-sub{margin-top:16px;font-size:clamp(1.15rem,2.7vw,1.75rem);font-weight:600;letter-spacing:-.02em;line-height:1.25;background:var(--sub-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block}
 .hero-desc{max-width:680px;margin:28px auto 0;font-size:clamp(1rem,1.9vw,1.25rem);color:var(--text-2);line-height:1.5;letter-spacing:-.01em}
@@ -54,16 +54,15 @@ button{font-family:inherit}
 .lead strong,.prose strong{color:var(--text-1);font-weight:600}
 
 /* SCREENS */
-.screens{--edge:max(24px,calc(50vw - var(--max-w)/2 + 24px));display:flex;align-items:flex-start;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:var(--edge);padding:6px var(--edge);margin-inline:calc(50% - 50vw);scrollbar-width:none}
-.screens::-webkit-scrollbar{display:none}
-.screens li{list-style:none;flex:0 0 auto;scroll-snap-align:start}
-.screens img{display:block;width:min(300px,72vw);height:auto;border-radius:20px;border:1px solid var(--border)}
-.screens-nav{display:flex;justify-content:flex-end;gap:14px;margin-top:26px}
-.screens-btn{width:48px;height:48px;border-radius:50%;border:none;background:var(--bg-card-hover);color:var(--text-1);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s,opacity .3s}
-.screens-btn:hover:not(:disabled){background:var(--border)}
-.screens-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.screens-btn:disabled{opacity:.35;cursor:default}
-.screens-btn svg{width:18px;height:18px}
+.screens{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;list-style:none}
+.screens li{list-style:none;min-width:0}
+.screens img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--border)}
+.screens-caption{margin-top:18px;text-align:center;font-size:.85rem;color:var(--text-3)}
+@media(max-width:900px){
+  .screens{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 24px 18px;margin:0 -24px;scrollbar-width:thin}
+  .screens li{flex:0 0 auto;scroll-snap-align:center}
+  .screens img{width:min(240px,62vw)}
+}
 
 /* BUILT LIST */
 .built{list-style:none;border-top:.5px solid var(--border)}
@@ -153,20 +152,14 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 
   <section class="section">
     <h2>DermaFusion screens.</h2>
-    <ul class="screens" id="screens">
-      <li><img src="screen-scan.jpg" width="600" height="1303" alt="DermaFusion iOS app: Scan screen with New Scan and Choose from Library"></li>
-      <li><img src="screen-body-tap.jpg" width="600" height="1303" alt="DermaFusion iOS app: 3D body model for tapping the lesion location, with chest selected"></li>
-      <li><img src="screen-gradcam.jpg" width="600" height="1303" alt="DermaFusion iOS app: scan detail with the Grad-CAM heatmap switched on over a lesion"></li>
-      <li><img src="screen-class-list.jpg" width="600" height="1303" alt="DermaFusion iOS app: class list with a confidence gauge reading 87% for melanocytic nevus"></li>
-      <li><img src="screen-one-view.jpg" width="600" height="1303" loading="lazy" alt="DermaFusion iOS app: results screen with the lesion photo, a low-risk assessment and class probabilities"></li>
-      <li><img src="learn.jpg" width="640" height="1387" loading="lazy" alt="DermaFusion iOS app: Learn screen with the ABCDE rule and skin-lesion types labeled benign or malignant"></li>
-      <li><img src="overview.jpg" width="640" height="1390" loading="lazy" alt="DermaFusion iOS app: melanoma overview screen with key visual features and a malignant label"></li>
-      <li><img src="screen-body-model.jpg" width="600" height="1303" loading="lazy" alt="DermaFusion iOS app: second 3D body model for setting the lesion site, with abdomen selected"></li>
+    <ul class="screens">
+      <li><img src="screen-scan.jpg" width="472" height="1024" alt="Scan screen with New Scan and Choose from Library"></li>
+      <li><img src="screen-body-tap.jpg" width="472" height="1024" alt="3D body model for marking the lesion location"></li>
+      <li><img src="screen-gradcam.jpg" width="472" height="1024" loading="lazy" alt="Scan detail with the Grad-CAM heatmap switched on"></li>
+      <li><img src="screen-class-list.jpg" width="472" height="1024" loading="lazy" alt="Class list with a confidence gauge"></li>
+      <li><img src="screen-overview.jpg" width="472" height="1024" loading="lazy" alt="Melanoma overview with key visual features"></li>
     </ul>
-    <div class="screens-nav">
-      <button class="screens-btn" id="screensPrev" type="button" aria-label="Previous screens" disabled><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5 5.5 9l5.5 5.5"/></svg></button>
-      <button class="screens-btn" id="screensNext" type="button" aria-label="Next screens"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5 12.5 9 7 14.5"/></svg></button>
-    </div>
+    <p class="screens-caption">Screens from the DermaFusion iOS app, which runs the exported ensemble on device.</p>
   </section>
 
   <section class="section narrow">
@@ -190,7 +183,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
     <div class="eyebrow">Project details</div>
     <h2>In depth.</h2>
     <p>Multi-source deep learning for <strong>8-class skin-lesion classification</strong> (MEL, NV, BCC, AKIEC, BKL, DF, VASC, OTHER), trained on four public dermatology datasets and deployed as both a Gradio research demo and a native iOS app.</p>
-    <p class="note"><strong>DermaFusion is an educational and research tool. It is not a medical device, not FDA approved, and not a substitute for professional medical advice.</strong></p>
+    <p class="note"><strong>DermaFusion is an educational and research tool. It is not a medical device, not FDA approved, and not a substitute for professional medical advice.</strong> It has not been clinically validated and must not be used to diagnose, screen, or make decisions about any real skin condition. Concerning skin lesions should always be evaluated by a qualified clinician.</p>
 
     <h3>Headline results</h3>
     <p>Final E0 + E3 soft-vote ensemble (EfficientNet-B4 × 2, 380 × 380), TEST set n = 5,279, 1,000-iteration bootstrap 95% CI:</p>
@@ -206,6 +199,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
         </tbody>
       </table>
     </div>
+    <p class="note"><strong>Reading the headline number.</strong> 0.540 balanced accuracy is across <strong>8 unified classes spanning four datasets</strong> (dermoscopic <em>and</em> smartphone images), which is a harder setting than a single-dataset 8-class benchmark. Top-2 accuracy of 0.907 and a binary-malignant AUROC of 0.830 are the more clinically meaningful framing of the same model.</p>
 
     <h3>Architecture summary</h3>
     <div class="table-wrap">
@@ -287,24 +281,6 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 const root=document.documentElement,themeBtn=document.getElementById('themeBtn');
 function setTheme(t){root.setAttribute('data-theme',t);themeBtn.textContent=t==='dark'?'🌙':'☀️'}
 themeBtn.addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
-
-const track=document.getElementById('screens'),prevBtn=document.getElementById('screensPrev'),nextBtn=document.getElementById('screensNext');
-const smooth=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function pageStep(){
-  const card=track.querySelector('li').getBoundingClientRect().width+(parseFloat(getComputedStyle(track).columnGap)||20);
-  return card*Math.max(1,Math.floor(track.clientWidth/card)-1);
-}
-function updateNav(){
-  const max=track.scrollWidth-track.clientWidth;
-  prevBtn.disabled=track.scrollLeft<=2;
-  nextBtn.disabled=track.scrollLeft>=max-2;
-}
-prevBtn.addEventListener('click',()=>track.scrollBy({left:-pageStep(),behavior:smooth?'smooth':'auto'}));
-nextBtn.addEventListener('click',()=>track.scrollBy({left:pageStep(),behavior:smooth?'smooth':'auto'}));
-track.addEventListener('scroll',updateNav,{passive:true});
-window.addEventListener('resize',updateNav);
-window.addEventListener('load',updateNav);
-updateNav();
 </script>
 </body>
 </html>
